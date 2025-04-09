@@ -1,6 +1,7 @@
 import time
 import threading
 import pyautogui
+import pygetwindow as gw
 import tkinter as tk
 from tkinter import ttk
 
@@ -13,19 +14,33 @@ running = False
 status_label = None
 log_text = None
 
-def delay():
-    time.sleep(1.0)
+def delay(segundos=1.0):
+    time.sleep(segundos)
 
 def log(mensagem):
     if log_text:
         log_text.insert(tk.END, f"{mensagem}\n")
         log_text.see(tk.END)
 
+def ativar_janela_jogo():
+    janela = gw.getWindowsWithTitle('Título da Janela do Jogo')
+    if janela:
+        try:
+            janela[0].activate()
+        except:
+            janela[0].minimize()
+            janela[0].maximize()
+        time.sleep(0.5)  # Pequeno atraso para garantir que a janela esteja ativa
+    else:
+        log("Janela do jogo não encontrada.")
+
 def executar_bot():
     global running
     tentativa = 1
     while running:
         log(f"🔁 Tentativa {tentativa}")
+
+        ativar_janela_jogo()
 
         pyautogui.press('enter')
         log("Pressionando Enter (iniciar busca)")
@@ -35,35 +50,59 @@ def executar_bot():
         log("Pressionando Enter (confirmar busca)")
         delay()
 
-        # Verifica se aparece a mensagem "nenhum leilão para exibir"
-        nenhum_leilao = pyautogui.locateOnScreen('nenhum_leilao.png', confidence=0.8)
+        try:
+            inicio = time.time()
+            encontrado = False
+            while time.time() - inicio < 5:
+                if pyautogui.locateOnScreen('nenhum_leilao.png', confidence=0.8):
+                    encontrado = True
+                    break
+            if encontrado:
+                log("Nenhum leilão para exibir.")
+                pyautogui.press('esc')
+                log("Pressionando Esc (voltar)")
+                delay()
+                pyautogui.press('enter')
+                log("Pressionando Enter (nova pesquisa)")
+                delay()
+                pyautogui.press('enter')
+                log("Pressionando Enter (confirmar nova pesquisa)")
+                delay()
+                tentativa += 1
+                continue
+        except:
+            log("🟢 Carro disponível - prosseguindo para compra")
 
-        if nenhum_leilao:
-            log("Nenhum leilão para exibir.")
-            pyautogui.press('esc')
-            log("Pressionando Esc (voltar)")
-            delay()
-        else:
-            log("🚗 Carro encontrado! Iniciando compra...")
-            pyautogui.press('y')
-            log("Pressionando Y (abrir menu)")
-            delay()
+        log("🚗 Carro encontrado! Iniciando compra...")
 
-            pyautogui.press('down')
-            log("Pressionando ↓ (selecionar 'Comprar agora')")
-            delay()
+        pyautogui.press('y')
+        log("Pressionando Y (abrir menu)")
+        delay()
 
-            pyautogui.press('enter')
-            log("Pressionando Enter (selecionar)")
-            delay()
+        pyautogui.press('down')
+        log("Pressionando ↓ (selecionar 'Comprar agora')")
+        delay()
 
-            pyautogui.press('enter')
-            log("Pressionando Enter (confirmar compra)")
-            delay()
+        pyautogui.press('enter')
+        log("Pressionando Enter (selecionar)")
+        delay()
 
-            pyautogui.press('esc')
-            log("Pressionando Esc (sair)")
-            delay()
+        pyautogui.press('enter')
+        log("Pressionando Enter (confirmar compra)")
+        delay()
+
+        time.sleep(4)  # Aguarda 4 segundos antes de fechar a mensagem de sucesso
+        pyautogui.press('enter')
+        log("Pressionando Enter (fechar mensagem de sucesso)")
+        delay()
+
+        pyautogui.press('esc')
+        log("Pressionando Esc (sair)")
+        delay()
+
+        pyautogui.press('esc')
+        log("Pressionando Esc (voltar para pesquisa)")
+        delay()
 
         pyautogui.press('enter')
         log("Pressionando Enter (nova pesquisa)")
