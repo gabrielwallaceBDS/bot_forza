@@ -42,5 +42,43 @@ Além disso, o jogo Forza Horizon 5 deve estar instalado e devidamente configura
 
 1. **Clone o repositório**:
 
-   ```bash
+   ```
    git clone https://github.com/seu-usuario/bot-leilao-fh5.git
+   ```
+
+2. **Navegue até o diretório do projeto**:
+
+   ```
+   cd bot-leilao-fh5
+   ```
+
+3. **Instale as dependências**:
+
+   ```
+   pip install -r requirements.txt
+   ```
+
+   > **Observação:** Certifique-se de que o arquivo `requirements.txt` contém todas as bibliotecas necessárias mencionadas nos Requisitos.
+
+## Uso
+
+1. Inicie o jogo Forza Horizon 5 e navegue até a tela de leilões.
+
+2. Execute o script do bot:
+
+   ```
+   python bot_leilao_fh5.py
+   ```
+
+3. Utilize a interface gráfica para iniciar ou parar o bot conforme necessário. Você também pode usar a tecla **'P'** para alternar entre iniciar e parar o bot.
+
+4. Acompanhe os logs na interface para monitorar as ações realizadas pelo bot.
+
+## Contribuição
+
+Contribuições são bem-vindas! Se você tiver sugestões de melhorias ou encontrar problemas, por favor, abra uma issue ou envie um pull request.
+
+## Licença
+
+Este projeto está licenciado sob a MIT License.
+
